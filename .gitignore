@@ -21,3 +21,6 @@ frontend/dist/
 django-aws-deploy/
 
 .DS_Store
+
+# Launch-video working folders (/brag); the keeper is copied to docs/brag/
+brag-output*/
