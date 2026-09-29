@@ -67,8 +67,9 @@ REPO=git@github.com:engagepy/django-discord-skeleton.git
 WSGI_MODULE=baatcheet.wsgi
 FRONTEND_DIR=frontend          # the server builds the React app on every deploy
 APP_REPO_PATH=../baatcheet     # your local checkout, for the preflight checks
-AWS_PROFILE=baatcheet
-CERT_EMAIL=<a project mailbox>
+AWS_PROFILE=indiapolls         # it shares the indiapolls instance…
+HOST_ON=indiapolls             # …so no new instance, just its own user, database, service and site
+CERT_EMAIL=info@astratechz.com
 ```
 
 Then `./launch.sh --check-only`, and `./launch.sh`. After that, every deploy is:

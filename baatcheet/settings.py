@@ -178,6 +178,9 @@ ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
+# gunicorn listens on a unix socket, so REMOTE_ADDR is empty and allauth must read the client's IP from the
+# X-Forwarded-For header nginx adds. Without this, allauth refuses every sign-in ("Unable to determine client IP").
+ALLAUTH_TRUSTED_PROXY_COUNT = 1
 LOGIN_REDIRECT_URL = "/"
 
 # Google sign-in turns on when both values are set; the button stays hidden otherwise.

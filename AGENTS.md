@@ -9,8 +9,9 @@ BaatCheet (baatcheet.app) is a small discussion board. People sign up (email ver
 
 - **Backend:** Django 5.2 LTS, one app (`base`), django-allauth for accounts, Django REST framework for the API.
 - **Frontend:** Vite + React + TypeScript in `frontend/`, built into `frontend/dist/` and served by Django.
-- **Production:** one EC2 instance running nginx, gunicorn, PostgreSQL and the profile pictures on disk, deployed with
-  [django-aws-deploy](https://github.com/engagepy/django-aws-deploy) (about $20/month). No RDS, no S3.
+- **Production:** shares the indiapolls EC2 instance (t4g.small, ap-south-1) via django-aws-deploy `HOST_ON=indiapolls`:
+  its own Linux user, PostgreSQL database, `baatcheet-gunicorn` units, nginx site and certificate. No RDS, no S3.
+  Its gunicorn is **`baatcheet-gunicorn`**; plain `gunicorn` on that box is indiapolls, so never touch it from here.
 
 Names: a **theme** is the `Topic` model; a **room** is `Room`; a **reply** is `Message`. The UI uses theme/room/reply
 everywhere. Keep it that way.
@@ -51,7 +52,8 @@ Nothing needs a key locally: SQLite, emails print in the runserver terminal (sig
 | Frontend lint + build | `cd frontend && npx oxlint && npm run build` |
 | Add a Python dependency | `uv add <pkg>`, then `uv export --no-hashes --no-dev --no-emit-project -o requirements.txt` (the server installs from `requirements.txt`; CI fails if it's stale) |
 | Deploy | `ssh baatcheet "sudo baatcheet-deploy"` (pull, pip, npm build, migrate, collectstatic, check, reload) |
-| Logs | `ssh baatcheet "journalctl -u gunicorn -f"` |
+| Logs | `ssh baatcheet "journalctl -u baatcheet-gunicorn -f"` |
+| Restart | `ssh baatcheet "sudo systemctl restart baatcheet-gunicorn"` |
 
 ## Layout
 
@@ -93,6 +95,12 @@ frontend/public/  theme.js (day/dark choice, shared with sign-in pages), favicon
   with a plain replace.
 - **`runserver --noreload` caches `index.html`**: after `npm run build` the old page points at deleted hashed JS
   (blank page, 404 in the console). Restart the server; production reloads gunicorn on every deploy.
+- **Every sign-in on the live site got a 403** on the first deploy: gunicorn listens on a unix socket, so
+  `REMOTE_ADDR` is empty, and allauth 65 ignores `X-Forwarded-For` unless `ALLAUTH_TRUSTED_PROXY_COUNT = 1`.
+  Tests never saw it (the test client sets `REMOTE_ADDR`); `test_sign_in_works_behind_nginx` now does.
+- **An unquoted `<` in the env file** (`DEFAULT_FROM_EMAIL=BaatCheet <…>`) is fine for systemd but breaks
+  `set -a; . /etc/baatcheet/env`, which runs before every management command. Quote such values; no inline comments
+  (systemd doesn't support them).
 - **Uploads over 1 MB get a 413 from nginx** (django-aws-deploy's `client_max_body_size 1m`). The profile form checks
   size before sending.
 - The old deployment kept static files and pictures on S3 and the database on RDS; the repo never held the old CSS

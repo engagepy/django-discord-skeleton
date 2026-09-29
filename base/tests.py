@@ -277,3 +277,15 @@ def test_sample_env_is_valid_shell():
     assert result.returncode == 0, result.stderr
     assert result.stderr == ""
     assert result.stdout == "BaatCheet <no-reply@baatcheet.app>"
+
+
+def test_sign_in_works_behind_nginx(alice):
+    # Regression: behind nginx + gunicorn's unix socket REMOTE_ADDR is empty; allauth 65 ignored X-Forwarded-For
+    # and answered 403 to every sign-in on the live site.
+    response = Client().post(
+        "/accounts/login/",
+        {"login": "alice", "password": "pw-12345-xyz"},
+        REMOTE_ADDR="",
+        HTTP_X_FORWARDED_FOR="203.0.113.7",
+    )
+    assert response.status_code == 302, response.status_code
