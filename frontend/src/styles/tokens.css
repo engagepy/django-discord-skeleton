@@ -1,79 +1,58 @@
-/* Design tokens, shared by the React app (app.css) and the Django sign-in pages (auth.css).
-   Day mode is the base; dark mode follows the OS until the user picks one (public/theme.js).
+/* Design tokens, shared by the React app (app.css) and the Django public pages (public.css): landing, sign-in,
+   and the same colours in the emails. BaatCheet's original palette: slate with the teal #71c6dd, and the logo's
+   blue, teal and orange for gradients. Dark is the default; day mode applies only when chosen (public/theme.js).
    Every text/background pair here passes WCAG AA. */
 
 :root {
-  --font-body: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-display: 'Space Grotesk Variable', var(--font-body);
+  --font-body: 'DM Sans Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: var(--font-body);
 
-  --bg: #f6f5fb;
-  --surface: #ffffff;
-  --surface-2: #f1eff9;
-  --border: #e3e0ef;
-  --text: #17141f;
-  --muted: #5c5871;
-  --accent: #6445f5;
-  --accent-hover: #5433ec;
-  --accent-text: #5433ec;
-  --accent-soft: #ece7ff;
-  --on-accent: #ffffff;
+  --bg: #1b1c25;
+  --surface: #252633;
+  --surface-2: #2e2f3f;
+  --border: #3a3c52;
+  --text: #eceef6;
+  --muted: #a9acc4;
+  --accent: #71c6dd;
+  --accent-hover: #8fd4e7;
+  --accent-text: #80cfe4;
+  --accent-soft: rgba(113, 198, 221, 0.14);
+  --on-accent: #0d1a20;
   --danger: #cf2544;
-  --danger-text: #b81d3a;
-  --ring: rgba(100, 69, 245, 0.35);
-  --shadow: 0 1px 2px rgba(23, 20, 31, 0.04), 0 8px 24px rgba(23, 20, 31, 0.06);
-  --shadow-lift: 0 2px 4px rgba(23, 20, 31, 0.05), 0 16px 40px rgba(100, 69, 245, 0.14);
-  --glass: rgba(255, 255, 255, 0.72);
-  --aurora-opacity: 0.35;
+  --danger-text: #ff8a94;
+  --ring: rgba(113, 198, 221, 0.4);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(0, 0, 0, 0.35);
+  --glass: rgba(27, 28, 37, 0.78);
+  --aurora-opacity: 0.45;
 
-  --gradient: linear-gradient(120deg, #8b5cf6 0%, #d946ef 45%, #ec4899 70%, #f97316 100%);
+  --gradient: linear-gradient(115deg, #2a6ae0 0%, #71c6dd 38%, #34cfc4 55%, #ffb000 82%, #f2542d 100%);
   --radius: 16px;
   --radius-sm: 10px;
 
-  color-scheme: light;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme='light']) {
-    --bg: #09090f;
-    --surface: #12121c;
-    --surface-2: #1a1a28;
-    --border: #262638;
-    --text: #edecf6;
-    --muted: #a3a1b9;
-    --accent: #6d4ff7;
-    --accent-hover: #7c60ff;
-    --accent-text: #b3a3ff;
-    --accent-soft: rgba(124, 96, 255, 0.16);
-    --danger: #cf2544;
-    --danger-text: #ff8098;
-    --ring: rgba(150, 128, 255, 0.45);
-    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
-    --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(124, 96, 255, 0.18);
-    --glass: rgba(12, 12, 20, 0.7);
-    --aurora-opacity: 0.5;
-    color-scheme: dark;
-  }
-}
-
-:root[data-theme='dark'] {
-  --bg: #09090f;
-  --surface: #12121c;
-  --surface-2: #1a1a28;
-  --border: #262638;
-  --text: #edecf6;
-  --muted: #a3a1b9;
-  --accent: #6d4ff7;
-  --accent-hover: #7c60ff;
-  --accent-text: #b3a3ff;
-  --accent-soft: rgba(124, 96, 255, 0.16);
-  --danger: #cf2544;
-  --danger-text: #ff8098;
-  --ring: rgba(150, 128, 255, 0.45);
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
-  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(124, 96, 255, 0.18);
-  --glass: rgba(12, 12, 20, 0.7);
-  --aurora-opacity: 0.5;
   color-scheme: dark;
+}
+
+:root[data-theme='light'] {
+  --bg: #f4f6fa;
+  --surface: #ffffff;
+  --surface-2: #edf0f6;
+  --border: #dce1ea;
+  --text: #151722;
+  --muted: #545a70;
+  --accent: #1b7d98;
+  --accent-hover: #166b83;
+  --accent-text: #146780;
+  --accent-soft: #e2f3f8;
+  --on-accent: #ffffff;
+  --danger: #cf2544;
+  --danger-text: #b81d3a;
+  --ring: rgba(27, 125, 152, 0.35);
+  --shadow: 0 1px 2px rgba(21, 23, 34, 0.04), 0 8px 24px rgba(21, 23, 34, 0.06);
+  --shadow-lift: 0 2px 4px rgba(21, 23, 34, 0.05), 0 16px 40px rgba(27, 125, 152, 0.14);
+  --glass: rgba(255, 255, 255, 0.78);
+  --aurora-opacity: 0.3;
+  color-scheme: light;
 }
 
 /* Shared basics */
@@ -93,7 +72,7 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font-body);
-  font-size: 15px;
+  font-size: 15.5px;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
 }
@@ -102,7 +81,8 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: -0.025em;
   line-height: 1.2;
   margin: 0;
 }
@@ -133,9 +113,9 @@ button {
   z-index: -1;
   opacity: var(--aurora-opacity);
   background:
-    radial-gradient(40% 50% at 20% 30%, rgba(139, 92, 246, 0.55), transparent 70%),
-    radial-gradient(35% 45% at 60% 10%, rgba(236, 72, 153, 0.35), transparent 70%),
-    radial-gradient(30% 40% at 85% 35%, rgba(249, 115, 22, 0.25), transparent 70%);
+    radial-gradient(40% 50% at 20% 30%, rgba(42, 106, 224, 0.5), transparent 70%),
+    radial-gradient(35% 45% at 60% 10%, rgba(113, 198, 221, 0.4), transparent 70%),
+    radial-gradient(30% 40% at 85% 35%, rgba(255, 176, 0, 0.22), transparent 70%);
   filter: blur(40px);
 }
 
@@ -151,8 +131,8 @@ button {
 }
 
 .brand .logo {
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
 }
 
 .btn {

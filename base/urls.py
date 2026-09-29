@@ -6,7 +6,7 @@ from . import views
 # Each one now serves the React app, which routes on the same paths (frontend/src/routes.ts).
 urlpatterns = [
     path("accounts/", include("allauth.urls")),
-    path("", views.app, name="home"),
+    path("", views.home, name="home"),
     path("room/<str:id>/", views.app, name="room"),
     path("profile/<str:id>", views.app, name="userprofile"),
     path("createroom/", views.app, name="createroom"),

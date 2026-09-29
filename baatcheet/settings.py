@@ -177,7 +177,8 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_LOGIN_METHODS = {"username", "email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "username*", "password1*", "password2*"]
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"
-ACCOUNT_LOGOUT_REDIRECT_URL = "/accounts/login/"
+ACCOUNT_EMAIL_SUBJECT_PREFIX = ""  # subjects already say BaatCheet (templates/account/email/)
+ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 # gunicorn listens on a unix socket, so REMOTE_ADDR is empty and allauth must read the client's IP from the
 # X-Forwarded-For header nginx adds. Without this, allauth refuses every sign-in ("Unable to determine client IP").
 ALLAUTH_TRUSTED_PROXY_COUNT = 1

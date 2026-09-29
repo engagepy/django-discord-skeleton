@@ -1,0 +1,9 @@
+{% extends "account/email/base_message.txt" %}
+{% block content %}{% autoescape off %}Hello,
+
+Someone tried to sign up for BaatCheet with {{ email }}, but an account with this address already exists.
+
+Forgot your password? Reset it here:
+{{ password_reset_url }}
+
+If it wasn't you, you can ignore this email.{% endautoescape %}{% endblock content %}

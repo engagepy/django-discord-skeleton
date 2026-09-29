@@ -1,0 +1,9 @@
+{% extends "account/email/base_message.txt" %}
+{% block content %}{% autoescape off %}Hi {{ user.username }},
+
+{% if signup %}Welcome to BaatCheet! {% endif %}Please confirm that {{ email }} is your email address{% if signup %} to finish setting up your account{% endif %}.
+
+{% if code %}Your confirmation code: {{ code }}{% else %}Confirm your email:
+{{ activate_url }}{% endif %}
+
+If you didn't ask for this, you can ignore this email and nothing will change.{% endautoescape %}{% endblock content %}

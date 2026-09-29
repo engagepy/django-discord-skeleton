@@ -9,7 +9,8 @@ and the whole thing on one small EC2 instance.
 - **Replies:** chat-style threads; replying makes you a participant
 - **Profiles:** picture, name, bio, rooms hosted, latest replies
 - **Accounts:** sign up with email verification, sign in by username or email, password reset, optional Google
-- **Day and dark mode** that follow your OS until you pick one; works on phones
+- **A landing page** that introduces BaatCheet to visitors, and branded emails
+- **Dark by default**, day mode one click away; works on phones
 - **A public read API:** `GET /api/rooms/` and `/api/rooms/<id>/`
 
 ## Quick start
