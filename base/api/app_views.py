@@ -59,12 +59,19 @@ def me(request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def home(request):
-    """Rooms matching ?q= by theme, name or description, plus replies in matching themes."""
+    """Rooms matching ?q= by theme, name or description, plus replies in matching themes.
+
+    ?topic= narrows to exactly one theme (the app's theme rail and room list).
+    """
     q = request.GET.get("q", "")
     rooms = rooms_with_counts().filter(
         Q(topic__name__icontains=q) | Q(name__icontains=q) | Q(description__icontains=q)
     )
-    activity = messages_with_rooms().filter(room__topic__name__icontains=q)[:SIDEBAR_ACTIVITY]
+    messages = messages_with_rooms().filter(room__topic__name__icontains=q)
+    if topic := request.GET.get("topic"):
+        rooms = rooms.filter(topic__name=topic)
+        messages = messages.filter(room__topic__name=topic)
+    activity = messages[:SIDEBAR_ACTIVITY]
     return Response(
         {
             "rooms": RoomCardSerializer(rooms, many=True).data,

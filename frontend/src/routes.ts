@@ -20,6 +20,8 @@ const withId = (pattern: string) => (id: number | string) => pattern.replace(':i
 export const paths = {
   home: patterns.home,
   search: (q: string) => (q ? `/?q=${encodeURIComponent(q)}` : '/'),
+  // One theme's rooms, as picked on the theme rail (exact match, unlike search).
+  theme: (name: string) => `/?topic=${encodeURIComponent(name)}`,
   room: withId(patterns.room),
   profile: withId(patterns.profile),
   createRoom: patterns.createRoom,

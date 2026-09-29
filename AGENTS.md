@@ -9,8 +9,9 @@ BaatCheet (baatcheet.app) is a small discussion board. People sign up (email ver
 
 - **Backend:** Django 5.2 LTS, one app (`base`), django-allauth for accounts, Django REST framework for the API.
 - **Frontend:** Vite + React + TypeScript in `frontend/`, built into `frontend/dist/` and served by Django.
-- **Public pages** are Django templates: the landing page at `/` for visitors (`templates/landing.html`, Discord-style)
-  and every sign-in page (`templates/allauth/layouts/base.html`), both on `templates/public_base.html`.
+- **Public pages** are Django templates: the landing page at `/` for visitors (`templates/landing.html`, Discord-style),
+  every sign-in page (`templates/allauth/layouts/base.html`) and the 404 page (`templates/404.html`), all on
+  `templates/public_base.html`.
   Signed-in people get the React app at `/`.
 - **Production:** shares the indiapolls EC2 instance (t4g.small, ap-south-1) via django-aws-deploy `HOST_ON=indiapolls`:
   its own Linux user, PostgreSQL database, `baatcheet-gunicorn` units, nginx site and certificate. No RDS, no S3.
@@ -70,7 +71,7 @@ templates/landing.html               the page visitors see at /
 templates/allauth/layouts/base.html  branded frame for every sign-in page
 templates/account/email/             branded HTML + text emails (base_message.html/.txt, one set per message)
 frontend/src/     main.tsx (router), routes.ts (every URL, once), api.ts (fetch + useApi),
-                  components/, pages/, styles/tokens.css (design tokens for app AND public pages),
+                  components/Shell.tsx (rail, sidebar, switcher, drawer), components/, pages/, styles/tokens.css (design tokens for app AND public pages),
                   styles/public.css (landing + sign-in pages)
 frontend/public/  theme.js (day/dark choice, shared with public pages), favicon.ico,
                   brand/ (the original logo.svg, logo-192.png for emails, avatar.svg)
@@ -88,8 +89,18 @@ frontend/public/  theme.js (day/dark choice, shared with public pages), favicon.
   "not allowed" on 403. See `base/api/authentication.py`.
 - **Sign-in stays server-rendered** (allauth). Style it through `templates/allauth/layouts/base.html` and
   `frontend/src/styles/public.css`, not by copying allauth page templates.
-- **Brand:** BaatCheet's original logo, default avatar and favicon (recovered from the Wayback Machine; the old S3
-  bucket is private now), its teal `#71c6dd` on slate, and DM Sans. Don't swap the logo.
+- **Look: Discord's structure, CRED's NeoPOP finish.** The app frame (`components/Shell.tsx`) is a Discord-style
+  theme rail (round icons that morph on hover, an active pill), a room sidebar (`# rooms` of the theme in focus, you at
+  the bottom), and the stage. The room page is a Discord chat (welcome header, grouped replies, day dividers, hover
+  tools, participants panel). Buttons are `.pop` (tokens.css): a solid face with a hard 3D edge you press into.
+  Near-black surfaces, teal `#71c6dd` as the neon, the logo's gradient for accents.
+- **Type:** Geist (UI), Unbounded (display headings), Geist Mono (kickers, timestamps, counts) and Instrument Serif
+  italic for one accent word in big headlines ("Start a *room*."). All OFL.
+- **Brand:** BaatCheet's original logo, default avatar and favicon (recovered from the Wayback Machine). Don't swap
+  the logo. Theme icons and banners come from `themeStyle(name)` in `components/bits.tsx`: white letters, and each
+  gradient stop is darkened until white passes 4.5:1 for every hue.
+- **Shortcuts:** `/` or ⌘K opens the quick switcher (rooms and themes). Keep them working.
+- **After creating or deleting a room**, call `useShell().refresh()` so the rail and room list catch up.
 - **Dark is the default** everywhere (the owner's decision); day mode only when the user picks it. Tokens: `:root`
   is dark, `[data-theme='light']` is day.
 - **One source of design tokens:** `frontend/src/styles/tokens.css`. Every colour pair passes WCAG AA in both
@@ -109,6 +120,10 @@ frontend/public/  theme.js (day/dark choice, shared with public pages), favicon.
   with a plain replace.
 - **`runserver --noreload` caches `index.html`**: after `npm run build` the old page points at deleted hashed JS
   (blank page, 404 in the console). Restart the server; production reloads gunicorn on every deploy.
+- **Dialogs inside hover-only UI vanish.** The delete confirmation lived inside a chat message's hover toolbar;
+  moving the pointer onto the dialog hid the toolbar and the dialog with it. `DeleteButton` portals its dialog to
+  `<body>`. Anything opened from a hover toolbar must do the same.
+- **Touch screens have no hover**: hover toolbars need a `@media (hover: none)` layout that doesn't cover content.
 - **Emails said "[example.com]"**: Django creates the default Site *after* all migrations run, so data migration
   `0002` had nothing to rename on a fresh database. `0003` creates/renames the row; `test_site_is_named_after_migrations`
   guards it.

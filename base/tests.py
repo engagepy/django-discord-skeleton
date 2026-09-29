@@ -79,6 +79,12 @@ def test_old_pages_serve_the_react_app(alice, url, settings, tmp_path):
     assert "csrftoken" in response.cookies  # the app sends it back on every change
 
 
+def test_unknown_address_gets_the_branded_404(client):
+    response = client.get("/no-such-page/")
+    assert response.status_code == 404
+    assert b"notfound-page__code" in response.content and b"BaatCheet" in response.content
+
+
 def test_sign_in_pages_render(client):
     for url in ["/accounts/login/", "/accounts/signup/", "/accounts/password/reset/"]:
         response = client.get(url)
@@ -122,6 +128,12 @@ def test_home_search_matches_theme_name_and_description(alice, room):
     for q in ["pyth", "tips", "share"]:
         data = api.get("/api/app/home/", {"q": q}).json()
         assert [r["name"] for r in data["rooms"]] == ["Django tips"], q
+
+
+def test_home_topic_filter_is_exact(alice, room):
+    Room.objects.create(host=alice, topic=Topic.objects.create(name="Music"), name="Python playlists")
+    data = client_for(alice).get("/api/app/home/", {"topic": "Python"}).json()
+    assert [r["name"] for r in data["rooms"]] == ["Django tips"]  # not the Music room that mentions Python
 
 
 def test_home_activity_is_the_latest_six_in_matching_themes(alice, room):
@@ -298,7 +310,7 @@ def test_visitors_get_the_landing_page(client):
     response = client.get("/")
     assert response.status_code == 200
     html = response.content.decode()
-    assert "A room for every conversation" in html
+    assert 'A room for every <span class="serif">conversation</span>' in html
     assert 'href="/accounts/signup/"' in html and 'href="/accounts/login/"' in html
     assert "brand/logo.svg" in html  # BaatCheet's original logo
     assert "l-stats" not in html  # no "0 rooms" on a fresh site
