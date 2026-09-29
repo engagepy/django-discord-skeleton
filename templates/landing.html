@@ -1,0 +1,202 @@
+{% extends "public_base.html" %}
+{% load static %}
+{% block body_class %}landing{% endblock %}
+{% block page %}
+{% url 'account_signup' as signup_url %}{% url 'account_login' as login_url %}
+<header class="l-nav">
+    <div class="l-wrap l-nav__inner">
+        <a href="/" class="brand">
+            <img class="logo" src="{% static 'brand/logo.svg' %}" alt="" width="36" height="36">
+            <span>BaatCheet</span>
+        </a>
+        <nav class="l-nav__links" aria-label="Sections">
+            <a href="#rooms">Rooms</a>
+            <a href="#talk">Conversations</a>
+            <a href="#people">Profiles</a>
+            <a href="/api/">API</a>
+        </nav>
+        <a href="{{ login_url }}" class="l-pill l-pill--light">Sign in</a>
+    </div>
+</header>
+
+<main>
+    {# ---------- Hero ---------- #}
+    <section class="l-hero">
+        <div class="l-wrap l-hero__grid">
+            <div class="l-hero__copy">
+                <p class="l-eyebrow">बातचीत · <em>baat-cheet</em> · conversation</p>
+                <h1>A room for every conversation</h1>
+                <p class="l-lead">
+                    Start a room on anything, from Python to space telescopes to the show everyone's watching.
+                    Bring your people and talk it through, one reply at a time.
+                </p>
+                <div class="l-cta">
+                    <a href="{{ signup_url }}" class="l-pill l-pill--light l-pill--lg">Create your account</a>
+                    <a href="{{ login_url }}" class="l-pill l-pill--dark l-pill--lg">Sign in</a>
+                </div>
+                {% if stats.rooms %}
+                    <dl class="l-stats">
+                        <div><dt>Rooms</dt><dd>{{ stats.rooms }}</dd></div>
+                        <div><dt>Themes</dt><dd>{{ stats.themes }}</dd></div>
+                        <div><dt>Replies</dt><dd>{{ stats.replies }}</dd></div>
+                    </dl>
+                {% endif %}
+            </div>
+
+            {# A picture of the app, drawn in HTML so it stays sharp and themed. #}
+            <div class="l-hero__art" aria-hidden="true">
+                <img class="l-orb" src="{% static 'brand/logo.svg' %}" alt="" width="150" height="150">
+                <div class="mock">
+                    <div class="mock__bar"><i></i><i></i><i></i></div>
+                    <div class="mock__body">
+                        <aside class="mock__side">
+                            <b>Browse themes</b>
+                            <span class="on">All <em>12</em></span>
+                            <span>Python <em>3</em></span>
+                            <span>JWST <em>2</em></span>
+                            <span>NCR-Scenes <em>4</em></span>
+                            <span>Shows &amp; Movies <em>3</em></span>
+                        </aside>
+                        <div class="mock__feed">
+                            <div class="mock__card">
+                                <div class="mock__who"><img src="{% static 'brand/avatar.svg' %}" alt="">@rajlakshmi <small>2 hours ago</small></div>
+                                <strong>Curate the best here</strong>
+                                <p>My top 3 right now are Playlist, The Crown &amp; Billion Dollar Code</p>
+                                <div class="mock__foot"><small>4 joined</small><span class="mock__chip">Shows &amp; Movies</span></div>
+                            </div>
+                            <div class="mock__card">
+                                <div class="mock__who"><img src="{% static 'brand/avatar.svg' %}" alt="">@engagepy <small>21 hours ago</small></div>
+                                <strong>Best speak-easy spots</strong>
+                                <p>Share the coolest spots in town. Birds of a feather flock together :)</p>
+                                <div class="mock__foot"><small>6 joined</small><span class="mock__chip">NCR-Scenes</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bubble-float bubble-float--a"><img src="{% static 'brand/avatar.svg' %}" alt="">Westworld, Love Death + Robots 🍿</div>
+                <div class="bubble-float bubble-float--b"><img src="{% static 'brand/avatar.svg' %}" alt="">Rocket Boys is an 8.9 on IMDb!</div>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- Features ---------- #}
+    <section class="l-feature" id="rooms">
+        <div class="l-wrap l-feature__grid">
+            <div class="l-feature__art" aria-hidden="true">
+                <div class="panel">
+                    <b class="panel__title">Browse themes</b>
+                    <ul class="panel__themes">
+                        <li class="on">All <em>12</em></li>
+                        <li>Python <em>3</em></li>
+                        <li>JavaScript <em>1</em></li>
+                        <li>JWST <em>2</em></li>
+                        <li>NCR-Scenes <em>4</em></li>
+                    </ul>
+                    <span class="panel__btn">+ New room</span>
+                </div>
+            </div>
+            <div class="l-feature__copy">
+                <h2>Rooms for every theme</h2>
+                <p>
+                    Every conversation lives in a room, and every room sits under a theme. Pick one that exists or type
+                    a new one: the theme list grows with what people care about.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="l-feature l-feature--flip" id="talk">
+        <div class="l-wrap l-feature__grid">
+            <div class="l-feature__art" aria-hidden="true">
+                <div class="panel panel--thread">
+                    <div class="t"><img src="{% static 'brand/avatar.svg' %}" alt=""><p><b>@meera</b> Dark mode that passes contrast checks. Share palettes!</p></div>
+                    <div class="t"><img src="{% static 'brand/avatar.svg' %}" alt=""><p><b>@arjun</b> Slate background, teal accent. Works in both.</p></div>
+                    <div class="t t--me"><img src="{% static 'brand/avatar.svg' %}" alt=""><p><b>@you</b> Joining in: reply and you're a participant.</p></div>
+                    <div class="panel__compose">Write a reply… <span>⏎</span></div>
+                </div>
+            </div>
+            <div class="l-feature__copy">
+                <h2>Talk it through, together</h2>
+                <p>
+                    Replies read top to bottom like a chat, and new ones appear on their own. Reply once and you're
+                    in the room's participant list; tidy up by deleting your own replies any time.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="l-feature" id="people">
+        <div class="l-wrap l-feature__grid">
+            <div class="l-feature__art" aria-hidden="true">
+                <div class="panel panel--profile">
+                    <div class="panel__banner"></div>
+                    <img class="panel__avatar" src="{% static 'brand/avatar.svg' %}" alt="">
+                    <b>Your name</b>
+                    <small>@you · 3 rooms hosted</small>
+                    <p>A line about you, your picture, and every room you host, in one place.</p>
+                </div>
+            </div>
+            <div class="l-feature__copy">
+                <h2>Your profile, your voice</h2>
+                <p>
+                    Add a picture and a bio. Your profile shows the rooms you host and your latest replies, so people
+                    know who they're talking to.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="l-feature l-feature--flip">
+        <div class="l-wrap l-feature__grid">
+            <div class="l-feature__art" aria-hidden="true">
+                <div class="panel panel--search">
+                    <div class="panel__search">⌕ &nbsp;python <kbd>/</kbd></div>
+                    <div class="panel__result"><b>Django 5.2 upgrade stories</b><span class="mock__chip">Python</span></div>
+                    <div class="panel__result"><b>Async views in production</b><span class="mock__chip">Python</span></div>
+                </div>
+            </div>
+            <div class="l-feature__copy">
+                <h2>Find anything, fast</h2>
+                <p>
+                    Press <kbd>/</kbd> anywhere to search rooms by theme, name or description. Day or dark, on your
+                    laptop or your phone, BaatCheet looks right.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    {# ---------- Closing call to action ---------- #}
+    <section class="l-final">
+        <div class="l-wrap">
+            <img src="{% static 'brand/logo.svg' %}" alt="" width="88" height="88">
+            <h2>Ready to start a conversation?</h2>
+            <a href="{{ signup_url }}" class="l-pill l-pill--accent l-pill--lg">Create your free account</a>
+        </div>
+    </section>
+</main>
+
+<footer class="l-foot">
+    <div class="l-wrap l-foot__grid">
+        <div>
+            <a href="/" class="brand">
+                <img class="logo" src="{% static 'brand/logo.svg' %}" alt="" width="32" height="32">
+                <span>BaatCheet</span>
+            </a>
+            <p>Themed rooms for real conversations.</p>
+        </div>
+        <nav aria-label="Account">
+            <b>Account</b>
+            <a href="{{ signup_url }}">Create an account</a>
+            <a href="{{ login_url }}">Sign in</a>
+            <a href="{% url 'account_reset_password' %}">Reset password</a>
+        </nav>
+        <nav aria-label="Developers">
+            <b>Developers</b>
+            <a href="/api/">Public API</a>
+            <a href="/api/rooms/">All rooms (JSON)</a>
+            <a href="https://github.com/engagepy/django-discord-skeleton">Source on GitHub</a>
+        </nav>
+    </div>
+    <div class="l-wrap l-foot__base">© {% now "Y" %} BaatCheet</div>
+</footer>
+{% endblock %}

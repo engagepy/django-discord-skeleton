@@ -1,4 +1,5 @@
 import os
+import secrets
 import subprocess
 import sys
 from pathlib import Path
@@ -49,7 +50,6 @@ def client_for(user):
 # --- Pages: the original addresses still work ------------------------------------------------------
 
 OLD_PAGES = [
-    "/",
     "/room/1/",
     "/profile/1",
     "/createroom/",
@@ -69,7 +69,7 @@ def test_old_pages_need_sign_in(client, url):
     assert response["Location"].startswith("/accounts/login/?next=")
 
 
-@pytest.mark.parametrize("url", OLD_PAGES)
+@pytest.mark.parametrize("url", ["/", *OLD_PAGES])
 def test_old_pages_serve_the_react_app(alice, url, settings, tmp_path):
     (tmp_path / "index.html").write_text('<div id="root"></div>')
     settings.TEMPLATES = [{**settings.TEMPLATES[0], "DIRS": [tmp_path]}]
@@ -289,3 +289,55 @@ def test_sign_in_works_behind_nginx(alice):
         HTTP_X_FORWARDED_FOR="203.0.113.7",
     )
     assert response.status_code == 302, response.status_code
+
+
+# --- Landing page, site name and emails -----------------------------------------------------------
+
+
+def test_visitors_get_the_landing_page(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    html = response.content.decode()
+    assert "A room for every conversation" in html
+    assert 'href="/accounts/signup/"' in html and 'href="/accounts/login/"' in html
+    assert "brand/logo.svg" in html  # BaatCheet's original logo
+    assert "l-stats" not in html  # no "0 rooms" on a fresh site
+
+
+def test_landing_shows_real_numbers_once_there_are_rooms(client, room):
+    Message.objects.create(user=room.host, room=room, body="hi")
+    html = client.get("/").content.decode()
+    assert "<dt>Rooms</dt><dd>1</dd>" in html and "<dt>Replies</dt><dd>1</dd>" in html
+
+
+def test_site_is_named_after_migrations():
+    # Regression: Django creates example.com after migrations ran, so emails said "[example.com]".
+    from django.contrib.sites.models import Site
+
+    site = Site.objects.get_current()
+    assert (site.domain, site.name) == ("baatcheet.app", "BaatCheet")
+
+
+def test_sign_up_email_is_branded(client, mailoutbox):
+    password = secrets.token_urlsafe(16)  # generated, so secret scanners have nothing to flag
+    response = client.post(
+        "/accounts/signup/",
+        {"email": "new@example.org", "username": "newbie", "password1": password, "password2": password},
+    )
+    assert response.status_code == 302
+    (mail,) = mailoutbox
+    assert mail.subject == "Welcome to BaatCheet: please confirm your email"
+    assert "example.com" not in mail.body and "Hi newbie" in mail.body
+    html, mimetype = mail.alternatives[0]
+    assert mimetype == "text/html"
+    assert "example.com" not in html
+    assert "Confirm email address" in html and "https://baatcheet.app/static/brand/logo-192.png" in html
+    assert "/accounts/confirm-email/" in html and "/accounts/confirm-email/" in mail.body
+
+
+def test_password_reset_email_is_branded(client, alice, mailoutbox):
+    client.post("/accounts/password/reset/", {"email": alice.email})
+    (mail,) = mailoutbox
+    assert mail.subject == "Reset your BaatCheet password"
+    assert "Choose a new password" in mail.alternatives[0][0]
+    assert "/accounts/password/reset/key/" in mail.body

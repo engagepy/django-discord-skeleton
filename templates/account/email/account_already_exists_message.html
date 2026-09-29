@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.html" %}
+{% block heading %}You already have an account{% endblock %}
+{% block preheader %}{{ email }} already has a BaatCheet account.{% endblock %}
+{% block heading_text %}You already have an account{% endblock %}
+{% block body %}<p style="margin:0;">Someone tried to sign up for BaatCheet with <strong>{{ email }}</strong>, but an account with this address already exists. If that was you and you've forgotten your password, you can reset it.</p>{% endblock %}
+{% block button %}{% include "account/email/_button.html" with url=password_reset_url label="Reset your password" %}{% endblock %}
+{% block after %}If it wasn't you, you can ignore this email.{% endblock %}

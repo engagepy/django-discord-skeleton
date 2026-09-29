@@ -1,0 +1,7 @@
+{% extends "account/email/base_message.html" %}
+{% block heading %}Password reset request{% endblock %}
+{% block preheader %}There's no BaatCheet account for {{ email }}.{% endblock %}
+{% block heading_text %}No account for this address{% endblock %}
+{% block body %}<p style="margin:0;">Someone asked to reset the BaatCheet password for <strong>{{ email }}</strong>, but there's no account with this address. If that was you, you can create one.</p>{% endblock %}
+{% block button %}{% include "account/email/_button.html" with url=signup_url label="Create an account" %}{% endblock %}
+{% block after %}If it wasn't you, you can ignore this email.{% endblock %}

@@ -9,6 +9,9 @@ BaatCheet (baatcheet.app) is a small discussion board. People sign up (email ver
 
 - **Backend:** Django 5.2 LTS, one app (`base`), django-allauth for accounts, Django REST framework for the API.
 - **Frontend:** Vite + React + TypeScript in `frontend/`, built into `frontend/dist/` and served by Django.
+- **Public pages** are Django templates: the landing page at `/` for visitors (`templates/landing.html`, Discord-style)
+  and every sign-in page (`templates/allauth/layouts/base.html`), both on `templates/public_base.html`.
+  Signed-in people get the React app at `/`.
 - **Production:** shares the indiapolls EC2 instance (t4g.small, ap-south-1) via django-aws-deploy `HOST_ON=indiapolls`:
   its own Linux user, PostgreSQL database, `baatcheet-gunicorn` units, nginx site and certificate. No RDS, no S3.
   Its gunicorn is **`baatcheet-gunicorn`**; plain `gunicorn` on that box is indiapolls, so never touch it from here.
@@ -62,10 +65,15 @@ baatcheet/        settings.py (env-driven), urls.py (+ media serving)
 base/             models, views.py (serves the React app on the old URLs), urls.py
 base/api/         views.py + urls.py: the original public read API (/api/, /api/rooms/…), unchanged
                   app_views.py + app_urls.py: the app's API under /api/app/, all sign-in required
-templates/allauth/layouts/base.html   branded frame for every sign-in page
+templates/public_base.html           <head> for landing + sign-in pages (fonts, public.css, theme.js, GA)
+templates/landing.html               the page visitors see at /
+templates/allauth/layouts/base.html  branded frame for every sign-in page
+templates/account/email/             branded HTML + text emails (base_message.html/.txt, one set per message)
 frontend/src/     main.tsx (router), routes.ts (every URL, once), api.ts (fetch + useApi),
-                  components/, pages/, styles/tokens.css (design tokens for app AND sign-in pages)
-frontend/public/  theme.js (day/dark choice, shared with sign-in pages), favicon.svg
+                  components/, pages/, styles/tokens.css (design tokens for app AND public pages),
+                  styles/public.css (landing + sign-in pages)
+frontend/public/  theme.js (day/dark choice, shared with public pages), favicon.ico,
+                  brand/ (the original logo.svg, logo-192.png for emails, avatar.svg)
 ```
 
 ## Rules that must not break
@@ -79,9 +87,15 @@ frontend/public/  theme.js (day/dark choice, shared with sign-in pages), favicon
 - **The app API answers 401 when signed out** (not DRF's default 403). The frontend redirects on 401 and shows
   "not allowed" on 403. See `base/api/authentication.py`.
 - **Sign-in stays server-rendered** (allauth). Style it through `templates/allauth/layouts/base.html` and
-  `frontend/src/styles/auth.css`, not by copying allauth templates.
+  `frontend/src/styles/public.css`, not by copying allauth page templates.
+- **Brand:** BaatCheet's original logo, default avatar and favicon (recovered from the Wayback Machine; the old S3
+  bucket is private now), its teal `#71c6dd` on slate, and DM Sans. Don't swap the logo.
+- **Dark is the default** everywhere (the owner's decision); day mode only when the user picks it. Tokens: `:root`
+  is dark, `[data-theme='light']` is day.
 - **One source of design tokens:** `frontend/src/styles/tokens.css`. Every colour pair passes WCAG AA in both
   themes. Entrance animations move but never fade, so contrast holds on every frame.
+- **Emails** are branded HTML with a plain-text twin, subjects written in full (`ACCOUNT_EMAIL_SUBJECT_PREFIX = ""`).
+  Adding an allauth flow that sends mail? Add its `_subject.txt`, `_message.txt` and `_message.html`.
 - **Build output is never committed.** The server builds `frontend/` (django-aws-deploy `FRONTEND_DIR=frontend`).
 - `manage.py check --deploy` must stay clean: `base/tests.py` runs it with production variables.
 
@@ -95,6 +109,9 @@ frontend/public/  theme.js (day/dark choice, shared with sign-in pages), favicon
   with a plain replace.
 - **`runserver --noreload` caches `index.html`**: after `npm run build` the old page points at deleted hashed JS
   (blank page, 404 in the console). Restart the server; production reloads gunicorn on every deploy.
+- **Emails said "[example.com]"**: Django creates the default Site *after* all migrations run, so data migration
+  `0002` had nothing to rename on a fresh database. `0003` creates/renames the row; `test_site_is_named_after_migrations`
+  guards it.
 - **Every sign-in on the live site got a 403** on the first deploy: gunicorn listens on a unix socket, so
   `REMOTE_ADDR` is empty, and allauth 65 ignores `X-Forwarded-For` unless `ALLAUTH_TRUSTED_PROXY_COUNT = 1`.
   Tests never saw it (the test client sets `REMOTE_ADDR`); `test_sign_in_works_behind_nginx` now does.

@@ -329,14 +329,6 @@
   background: var(--surface-2);
 }
 
-.avatar--initials {
-  display: inline-grid;
-  place-items: center;
-  color: #fff;
-  font-weight: 700;
-  font-family: var(--font-display);
-}
-
 .avatar--sm {
   width: 28px;
   height: 28px;

@@ -1,0 +1,9 @@
+{% extends "account/email/base_message.txt" %}
+{% block content %}{% autoescape off %}Hello,
+
+Someone asked to reset the BaatCheet password for {{ email }}, but there's no account with this address.
+
+If that was you, you can create an account here:
+{{ signup_url }}
+
+If it wasn't you, you can ignore this email.{% endautoescape %}{% endblock content %}

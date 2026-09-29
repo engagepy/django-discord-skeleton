@@ -1,0 +1,6 @@
+{% autoescape off %}{% block content %}{% endblock content %}
+
+—
+BaatCheet · https://{{ current_site.domain }}
+{% block reason %}You received this email because someone used this address on BaatCheet.{% endblock %}
+{% endautoescape %}

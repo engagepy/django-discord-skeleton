@@ -1,0 +1,28 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Google tag (gtag.js) -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-CCXFRT8B75"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-CCXFRT8B75');
+        </script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="color-scheme" content="dark light">
+        <meta name="description" content="{% block description %}BaatCheet: themed rooms for real conversations. Start a room on anything, bring your people, and talk it through.{% endblock %}">
+        <title>{% block title %}BaatCheet{% endblock %}</title>
+        <link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32">
+        <link rel="icon" type="image/svg+xml" href="{% static 'brand/logo.svg' %}">
+        {# Built by the frontend (frontend/src/styles/public.css): the same design tokens as the app. #}
+        <link rel="stylesheet" href="{% static 'assets/public.css' %}">
+        <script src="{% static 'theme.js' %}"></script>
+        {% block head_extra %}{% endblock %}
+    </head>
+    <body class="{% block body_class %}{% endblock %}">
+        <div class="aurora" aria-hidden="true"></div>
+        {% block page %}{% endblock %}
+    </body>
+</html>
