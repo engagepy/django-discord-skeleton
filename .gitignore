@@ -1,21 +1,23 @@
+# Secrets and local settings
 .env
-venv/
-env/
-secret_key.txt
-sec.py
-pagekite.py
-Procfile
+deploy.conf
+
+# Python
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+
+# Local data: development database, uploaded pictures, collected static files
+db.sqlite3
+media/
+staticfiles/
+
+# Frontend (built on the server; never committed)
+frontend/node_modules/
+frontend/dist/
+
+# The deploy tool is its own repo (github.com/engagepy/django-aws-deploy), cloned alongside
+django-aws-deploy/
+
 .DS_Store
-
-**/__pycache__
-
-baatcheet/.DS_Store/
-
-
-# Elastic Beanstalk Files
-.ebextension/*
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-baatcheet/database.db
-baatcheet/db.sqlite3

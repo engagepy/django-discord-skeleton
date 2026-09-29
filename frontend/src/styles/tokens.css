@@ -1,0 +1,271 @@
+/* Design tokens, shared by the React app (app.css) and the Django sign-in pages (auth.css).
+   Day mode is the base; dark mode follows the OS until the user picks one (public/theme.js).
+   Every text/background pair here passes WCAG AA. */
+
+:root {
+  --font-body: 'Inter Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-display: 'Space Grotesk Variable', var(--font-body);
+
+  --bg: #f6f5fb;
+  --surface: #ffffff;
+  --surface-2: #f1eff9;
+  --border: #e3e0ef;
+  --text: #17141f;
+  --muted: #5c5871;
+  --accent: #6445f5;
+  --accent-hover: #5433ec;
+  --accent-text: #5433ec;
+  --accent-soft: #ece7ff;
+  --on-accent: #ffffff;
+  --danger: #cf2544;
+  --danger-text: #b81d3a;
+  --ring: rgba(100, 69, 245, 0.35);
+  --shadow: 0 1px 2px rgba(23, 20, 31, 0.04), 0 8px 24px rgba(23, 20, 31, 0.06);
+  --shadow-lift: 0 2px 4px rgba(23, 20, 31, 0.05), 0 16px 40px rgba(100, 69, 245, 0.14);
+  --glass: rgba(255, 255, 255, 0.72);
+  --aurora-opacity: 0.35;
+
+  --gradient: linear-gradient(120deg, #8b5cf6 0%, #d946ef 45%, #ec4899 70%, #f97316 100%);
+  --radius: 16px;
+  --radius-sm: 10px;
+
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --bg: #09090f;
+    --surface: #12121c;
+    --surface-2: #1a1a28;
+    --border: #262638;
+    --text: #edecf6;
+    --muted: #a3a1b9;
+    --accent: #6d4ff7;
+    --accent-hover: #7c60ff;
+    --accent-text: #b3a3ff;
+    --accent-soft: rgba(124, 96, 255, 0.16);
+    --danger: #cf2544;
+    --danger-text: #ff8098;
+    --ring: rgba(150, 128, 255, 0.45);
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+    --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(124, 96, 255, 0.18);
+    --glass: rgba(12, 12, 20, 0.7);
+    --aurora-opacity: 0.5;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --bg: #09090f;
+  --surface: #12121c;
+  --surface-2: #1a1a28;
+  --border: #262638;
+  --text: #edecf6;
+  --muted: #a3a1b9;
+  --accent: #6d4ff7;
+  --accent-hover: #7c60ff;
+  --accent-text: #b3a3ff;
+  --accent-soft: rgba(124, 96, 255, 0.16);
+  --danger: #cf2544;
+  --danger-text: #ff8098;
+  --ring: rgba(150, 128, 255, 0.45);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-lift: 0 2px 4px rgba(0, 0, 0, 0.3), 0 16px 40px rgba(124, 96, 255, 0.18);
+  --glass: rgba(12, 12, 20, 0.7);
+  --aurora-opacity: 0.5;
+  color-scheme: dark;
+}
+
+/* Shared basics */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input,
+textarea,
+select,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+/* The soft coloured glow behind every page */
+.aurora {
+  position: fixed;
+  inset: -20vh -10vw auto;
+  height: 70vh;
+  pointer-events: none;
+  z-index: -1;
+  opacity: var(--aurora-opacity);
+  background:
+    radial-gradient(40% 50% at 20% 30%, rgba(139, 92, 246, 0.55), transparent 70%),
+    radial-gradient(35% 45% at 60% 10%, rgba(236, 72, 153, 0.35), transparent 70%),
+    radial-gradient(30% 40% at 85% 35%, rgba(249, 115, 22, 0.25), transparent 70%);
+  filter: blur(40px);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.03em;
+}
+
+.brand .logo {
+  width: 32px;
+  height: 32px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 14.5px;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    transform 0.15s,
+    box-shadow 0.15s;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--on-accent);
+  box-shadow: 0 6px 20px -6px var(--accent);
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+
+.btn--ghost {
+  background: var(--surface-2);
+  border-color: var(--border);
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+}
+
+.btn--danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn--sm {
+  padding: 7px 12px;
+  font-size: 13.5px;
+  border-radius: 10px;
+}
+
+.link {
+  color: var(--accent-text);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.small {
+  font-size: 13px;
+}
+
+.field-error {
+  color: var(--danger-text);
+  font-size: 13.5px;
+  margin: 6px 0 0;
+}
+
+.field input,
+.field textarea,
+.search input,
+.auth-card input:not([type='checkbox']):not([type='radio']) {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+
+.field input:focus,
+.field textarea:focus,
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--ring);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

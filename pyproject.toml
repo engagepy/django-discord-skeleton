@@ -1,0 +1,34 @@
+[project]
+name = "baatcheet"
+version = "2.0.0"
+description = "BaatCheet: themed discussion rooms. Django API + Vite/React frontend."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.2,<5.3",
+    "django-allauth[socialaccount]>=65.0",
+    "django-cors-headers>=4.4",
+    "djangorestframework>=3.15",
+    "gunicorn>=23.0",
+    "pillow>=11.0",
+    "psycopg[binary]>=3.2",
+    "python-dotenv>=1.0",
+    "tzdata>=2024.1",
+]
+
+[dependency-groups]
+dev = ["pytest>=8", "pytest-django>=4.9", "ruff>=0.6"]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "baatcheet.settings"
+python_files = ["tests.py", "test_*.py"]
+
+[tool.ruff]
+line-length = 110
+extend-exclude = ["*/migrations/*", "django-aws-deploy", "frontend"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]

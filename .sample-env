@@ -1,0 +1,40 @@
+# BaatCheet settings. Every key the app reads is here.
+#
+# Production: django-aws-deploy copies this file to /etc/baatcheet/env on the server, fills in the
+# secret key, hosts and database, and setup_ses.sh adds the email keys. Change values later with:
+#   printf 'KEY=value\n' | ssh baatcheet "sudo baatcheet-set-env && sudo systemctl restart gunicorn"
+#
+# Local development needs none of this. To try Google sign-in locally, put just the two GOOGLE_ keys
+# in a .env file at the repo root (git-ignored).
+
+# Django
+DJANGO_DEBUG=false
+# Generate with: python3 -c "import secrets; print(secrets.token_urlsafe(50))"
+DJANGO_SECRET_KEY=
+DJANGO_ALLOWED_HOSTS=baatcheet.app,www.baatcheet.app
+
+# PostgreSQL on the same instance: only POSTGRES_DB, the rest blank (local socket, peer authentication).
+# Without POSTGRES_DB, local development uses SQLite (db.sqlite3).
+POSTGRES_DB=baatcheet
+POSTGRES_USER=
+POSTGRES_PASSWORD=
+POSTGRES_HOST=
+POSTGRES_PORT=
+
+# Profile pictures. Default: media/ inside the app folder. On the server, keep them outside the code:
+DJANGO_MEDIA_ROOT=/srv/baatcheet/media
+
+# Email through AWS SES SMTP (setup_ses.sh writes these). Without them, emails print to the console.
+EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
+EMAIL_HOST=email-smtp.ap-south-1.amazonaws.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=true
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+DEFAULT_FROM_EMAIL=BaatCheet <no-reply@baatcheet.app>
+
+# Optional: "Sign in with Google". Without both, the button is hidden.
+# Create an OAuth client at https://console.cloud.google.com/apis/credentials with redirect URI
+# https://baatcheet.app/accounts/google/login/callback/
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=

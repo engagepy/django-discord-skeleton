@@ -1,0 +1,45 @@
+{% load i18n static %}<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="color-scheme" content="light dark">
+        <title>{% block head_title %}{% endblock head_title %} · BaatCheet</title>
+        <link rel="icon" type="image/svg+xml" href="{% static 'favicon.svg' %}">
+        {# Built by the frontend (frontend/src/styles/auth.css) so the sign-in pages share the app's look. #}
+        <link rel="stylesheet" href="{% static 'assets/auth.css' %}">
+        <script src="{% static 'theme.js' %}"></script>
+        {% block extra_head %}{% endblock extra_head %}
+    </head>
+    <body class="auth">
+        <div class="aurora" aria-hidden="true"></div>
+        {% block body %}
+            <div class="auth-wrap">
+                <a href="/" class="brand">
+                    <img class="logo" src="{% static 'favicon.svg' %}" alt="">
+                    <span>BaatCheet</span>
+                </a>
+                {% if messages %}
+                    <ul class="auth-messages">
+                        {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+                    </ul>
+                {% endif %}
+                <main class="auth-card">
+                    {% block content %}{% endblock content %}
+                </main>
+                <nav class="auth-foot">
+                    {% if user.is_authenticated %}
+                        <a href="/">{% trans "Back to BaatCheet" %}</a>
+                        <a href="{% url 'account_email' %}">{% trans "Emails" %}</a>
+                        <a href="{% url 'account_change_password' %}">{% trans "Password" %}</a>
+                        <a href="{% url 'account_logout' %}">{% trans "Sign out" %}</a>
+                    {% else %}
+                        <a href="{% url 'account_login' %}">{% trans "Sign in" %}</a>
+                        <a href="{% url 'account_signup' %}">{% trans "Sign up" %}</a>
+                    {% endif %}
+                </nav>
+            </div>
+        {% endblock body %}
+        {% block extra_body %}{% endblock extra_body %}
+    </body>
+</html>
