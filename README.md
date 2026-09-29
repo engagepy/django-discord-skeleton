@@ -10,7 +10,8 @@ and the whole thing on one small EC2 instance.
 - **Profiles:** picture, name, bio, rooms hosted, latest replies
 - **Accounts:** sign up with email verification, sign in by username or email, password reset, optional Google
 - **A landing page** that introduces BaatCheet to visitors, and branded emails
-- **Dark by default**, day mode one click away; works on phones
+- **Discord-style app with a CRED-style finish**: a theme rail, `# room` channels, chat threads, a quick switcher
+  (`/` or ⌘K), NeoPOP buttons; dark by default, day mode one click away; works on phones
 - **A public read API:** `GET /api/rooms/` and `/api/rooms/<id>/`
 
 ## Quick start

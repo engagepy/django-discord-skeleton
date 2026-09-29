@@ -1,10 +1,13 @@
-import '@fontsource-variable/dm-sans'
+import '@fontsource-variable/geist'
+import '@fontsource-variable/geist-mono'
+import '@fontsource-variable/unbounded'
+import '@fontsource/instrument-serif/400-italic.css'
 import './styles/app.css'
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Layout } from './components/Layout'
+import { Shell } from './components/Shell'
 import { MeProvider } from './me'
 import { Home } from './pages/Home'
 import { EditProfile, RoomForm } from './pages/forms'
@@ -15,7 +18,7 @@ import { patterns } from './routes'
 
 const router = createBrowserRouter([
   {
-    element: <Layout />,
+    element: <Shell />,
     children: [
       { path: patterns.home, element: <Home /> },
       { path: patterns.room, element: <Room /> },

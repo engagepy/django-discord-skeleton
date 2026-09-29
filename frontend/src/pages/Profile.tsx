@@ -1,8 +1,8 @@
-import { UserRoundPen } from 'lucide-react'
+import { Sparkles } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { useApi } from '../api'
-import { Avatar, ErrorState, Loading } from '../components/bits'
-import { ActivitySidebar, RoomList, ThemesSidebar } from '../components/panels'
+import { Avatar, ErrorState, Loading, themeStyle } from '../components/bits'
+import { ActivityList, RoomGrid } from '../components/panels'
 import { useMe } from '../me'
 import { paths } from '../routes'
 import type { Message, Profile as ProfileUser, RoomCard } from '../types'
@@ -14,43 +14,66 @@ export function Profile() {
   const { me } = useMe()
   const { data, error, reload } = useApi<ProfileData>(`users/${id}/`)
 
-  if (error) return <ErrorState message={error.status === 404 ? 'No one has that profile.' : error.message} />
+  if (error) {
+    return (
+      <div className="page">
+        <ErrorState message={error.status === 404 ? 'No one has that profile.' : error.message} />
+      </div>
+    )
+  }
+  if (!data) {
+    return (
+      <div className="page">
+        <Loading label="Loading profile" />
+      </div>
+    )
+  }
+  const { user } = data
 
   return (
-    <div className="grid grid--3">
-      <ThemesSidebar />
-      <section className="main-col">
-        {!data ? (
-          <Loading label="Loading profile" />
-        ) : (
-          <>
-            <div className="card profile">
-              <div className="profile__banner" aria-hidden="true" />
-              <div className="profile__body">
-                <Avatar user={data.user} size="xl" />
-                <div className="profile__who">
-                  <h1>{data.user.name || data.user.username}</h1>
-                  <p className="muted">@{data.user.username}</p>
-                </div>
-                {data.user.id === me.id && (
-                  <Link to={paths.updateUser} className="btn btn--ghost btn--sm profile__edit">
-                    <UserRoundPen size={15} /> Edit profile
-                  </Link>
-                )}
-              </div>
-              <div className="profile__about">
-                <h2 className="side__title">About</h2>
-                <p>{data.user.bio || <span className="muted">Nothing here yet.</span>}</p>
-              </div>
-            </div>
-            <h2 className="section-title">
-              Rooms hosted <span className="count">{data.rooms.length}</span>
-            </h2>
-            <RoomList rooms={data.rooms} empty="No rooms hosted yet." />
-          </>
-        )}
+    <div className="page page--wide">
+      <section className="pcard">
+        <div className="pcard__banner" style={themeStyle(user.username)} aria-hidden="true" />
+        <div className="pcard__row">
+          <span className="pcard__avatar">
+            <Avatar user={user} size="xl" />
+          </span>
+          {user.id === me.id && (
+            <Link to={paths.updateUser} className="pop pop--light pop--sm pcard__edit">
+              <Sparkles size={15} /> Edit profile
+            </Link>
+          )}
+        </div>
+        <div className="pcard__info">
+          <h1>{user.name || user.username}</h1>
+          <p className="mono muted">@{user.username}</p>
+          <div className="pcard__stats">
+            <span>
+              <b>{data.rooms.length}</b> {data.rooms.length === 1 ? 'room' : 'rooms'} hosted
+            </span>
+            <span>
+              <b>{data.activity.length}</b> recent {data.activity.length === 1 ? 'reply' : 'replies'}
+            </span>
+          </div>
+          <div className="pcard__about">
+            <h2 className="kicker mono">About me</h2>
+            <p>{user.bio || <span className="muted">Nothing here yet.</span>}</p>
+          </div>
+        </div>
       </section>
-      <ActivitySidebar messages={data?.activity} onChange={reload} />
+
+      <div className="split">
+        <section className="split__main">
+          <h2 className="section-title">
+            Rooms hosted <span className="mono">{data.rooms.length}</span>
+          </h2>
+          <RoomGrid rooms={data.rooms} empty="No rooms hosted yet." />
+        </section>
+        <aside className="split__side">
+          <h2 className="section-title">Latest replies</h2>
+          <ActivityList messages={data.activity} onChange={reload} />
+        </aside>
+      </div>
     </div>
   )
 }

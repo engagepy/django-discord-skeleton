@@ -1,0 +1,17 @@
+{% extends "public_base.html" %}
+{% load static %}
+{# Django serves this for any unknown address (with DEBUG off); the React app has its own for in-app links. #}
+{% block title %}Not found · BaatCheet{% endblock %}
+{% block body_class %}auth{% endblock %}
+{% block page %}
+<main class="auth-wrap notfound-page">
+    <a href="/" class="brand">
+        <img class="logo" src="{% static 'brand/logo.svg' %}" alt="" width="44" height="44">
+        <span>BaatCheet</span>
+    </a>
+    <p class="notfound-page__code">404</p>
+    <h1>This room is <span class="serif">empty</span>.</h1>
+    <p class="muted">The page you’re looking for doesn’t exist.</p>
+    <a href="/" class="l-pill l-pill--lg">Back to BaatCheet</a>
+</main>
+{% endblock %}

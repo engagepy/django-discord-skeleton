@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { api } from './api'
-import { Loading } from './components/bits'
+import { Logo } from './components/bits'
 import type { Me } from './types'
 
 type MeContext = { me: Me; setMe: (me: Me) => void }
@@ -18,8 +18,10 @@ export function MeProvider({ children }: { children: React.ReactNode }) {
   if (failed) return <div className="boot">Couldn’t reach BaatCheet. Refresh to try again.</div>
   if (!me)
     return (
-      <div className="boot">
-        <Loading />
+      <div className="boot" role="status" aria-label="Loading BaatCheet">
+        <span className="boot__logo">
+          <Logo size={72} />
+        </span>
       </div>
     )
   return <Context.Provider value={{ me, setMe }}>{children}</Context.Provider>

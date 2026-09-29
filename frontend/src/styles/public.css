@@ -1,8 +1,46 @@
 /* BaatCheet's public pages, rendered by Django: the landing page (templates/landing.html) and every sign-in page
    (templates/allauth/layouts/base.html). Same tokens as the app. */
 
-@import '@fontsource-variable/dm-sans';
+@import '@fontsource-variable/geist';
+@import '@fontsource-variable/geist-mono';
+@import '@fontsource-variable/unbounded';
+@import '@fontsource/instrument-serif/400-italic.css';
 @import './tokens.css';
+
+/* ---------- 404 (templates/404.html) ---------- */
+
+.notfound-page {
+  justify-items: center;
+  text-align: center;
+}
+
+.notfound-page__code {
+  margin: 12px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(90px, 18vw, 150px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.notfound-page h1 {
+  font-size: clamp(26px, 4vw, 38px);
+  letter-spacing: -0.05em;
+}
+
+.notfound-page h1 .serif {
+  color: var(--accent-text);
+  font-size: 1.12em;
+}
+
+.notfound-page > p.muted {
+  margin: 0 0 12px;
+  color: var(--muted);
+}
 
 /* ---------- Sign-in pages ----------
    allauth renders plain HTML (headings, paragraphs wrapping label + input, buttons, links); this styles it. */
@@ -32,9 +70,9 @@
 
 .auth-card {
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-strong);
   border-radius: 20px;
-  box-shadow: var(--shadow-lift);
+  box-shadow: 8px 8px 0 0 var(--rail);
   padding: 32px;
   position: relative;
   overflow: hidden;
@@ -49,7 +87,8 @@
 }
 
 .auth-card h1 {
-  font-size: 26px;
+  font-size: 28px;
+  letter-spacing: -0.05em;
   margin-bottom: 8px;
 }
 
@@ -97,20 +136,29 @@
 
 .auth-card button,
 .auth-card input[type='submit'] {
-  width: 100%;
-  padding: 12px 18px;
-  margin-top: 6px;
-  border: 0;
-  border-radius: 12px;
+  width: calc(100% - var(--pop-depth));
+  padding: 13px 18px;
+  margin-top: 8px;
+  border: 1px solid var(--accent-edge);
+  border-radius: 4px;
   background: var(--accent);
   color: var(--on-accent);
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 6px 20px -6px var(--accent);
+  box-shadow: var(--pop-depth) var(--pop-depth) 0 0 var(--accent-edge);
+  transition:
+    transform 0.08s ease-out,
+    box-shadow 0.08s ease-out;
 }
 
 .auth-card button:hover {
-  background: var(--accent-hover);
+  transform: translate(-1px, -1px);
+  box-shadow: calc(var(--pop-depth) + 1px) calc(var(--pop-depth) + 1px) 0 0 var(--accent-edge);
+}
+
+.auth-card button:active {
+  transform: translate(var(--pop-depth), var(--pop-depth));
+  box-shadow: none;
 }
 
 /* Secondary buttons on the email management page */
@@ -253,53 +301,57 @@
   color: var(--text);
 }
 
+/* Buttons: CRED's NeoPOP (a solid face with a hard edge you press into), from tokens.css .pop */
 .l-pill {
+  --face: var(--accent);
+  --edge: var(--accent-edge);
+  --ink: var(--on-accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   padding: 10px 20px;
-  border-radius: 999px;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: var(--face);
+  color: var(--ink);
   font-weight: 700;
   font-size: 15px;
   text-decoration: none;
   white-space: nowrap;
+  box-shadow: var(--pop-depth) var(--pop-depth) 0 0 var(--edge);
   transition:
-    transform 0.15s,
-    box-shadow 0.15s,
-    background 0.15s;
+    transform 0.08s ease-out,
+    box-shadow 0.08s ease-out;
 }
 
 .l-pill:hover {
-  transform: translateY(-1px);
+  transform: translate(-1px, -1px);
+  box-shadow: calc(var(--pop-depth) + 1px) calc(var(--pop-depth) + 1px) 0 0 var(--edge);
+}
+
+.l-pill:active {
+  transform: translate(var(--pop-depth), var(--pop-depth));
+  box-shadow: none;
 }
 
 .l-pill--light {
-  background: #ffffff;
-  color: #151722;
-}
-
-.l-pill--light:hover {
-  box-shadow: 0 10px 28px -8px rgba(255, 255, 255, 0.45);
-  color: #146780;
+  --face: #ffffff;
+  --edge: #6b6b7a;
+  --ink: #0a0a0d;
 }
 
 .l-pill--dark {
-  background: #151620;
-  color: #ffffff;
-  border: 1px solid #3a3c52;
-}
-
-.l-pill--dark:hover {
-  background: #22232f;
+  --face: var(--surface-2);
+  --edge: var(--border-strong);
+  --ink: var(--text);
 }
 
 .l-pill--accent {
-  background: var(--accent);
-  color: var(--on-accent);
-  box-shadow: 0 12px 32px -10px var(--accent);
+  --face: var(--accent);
 }
 
 .l-pill--lg {
+  --pop-depth: 5px;
   padding: 16px 30px;
   font-size: 17px;
 }
@@ -319,10 +371,12 @@
 }
 
 .l-eyebrow {
-  margin: 0 0 18px;
+  margin: 0 0 20px;
   color: var(--accent-text);
-  font-weight: 700;
-  letter-spacing: 0.02em;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
 }
 
 .l-eyebrow em {
@@ -331,11 +385,22 @@
 }
 
 .l-hero h1 {
-  font-size: clamp(40px, 6vw, 72px);
-  line-height: 1.02;
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  font-weight: 900;
+  font-size: clamp(38px, 5.6vw, 70px);
+  line-height: 1;
+  letter-spacing: -0.055em;
+  font-weight: 800;
+}
+
+.l-hero h1 .serif,
+.l-final h2 .serif {
+  display: inline-block;
+  font-size: 1.12em;
+  letter-spacing: -0.02em;
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  padding-right: 0.1em;
 }
 
 .l-lead {
@@ -774,10 +839,9 @@
 }
 
 .l-final h2 {
-  font-size: clamp(32px, 5vw, 56px);
-  text-transform: uppercase;
-  font-weight: 900;
-  letter-spacing: -0.035em;
+  font-size: clamp(32px, 5vw, 58px);
+  font-weight: 800;
+  letter-spacing: -0.05em;
   margin: 18px 0 32px;
 }
 
@@ -922,6 +986,7 @@
 }
 
 :root[data-theme='light'] .l-pill--light {
-  background: #151722;
-  color: #ffffff;
+  --face: #0b0b0e;
+  --edge: #71c6dd;
+  --ink: #ffffff;
 }
