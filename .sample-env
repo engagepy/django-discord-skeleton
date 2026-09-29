@@ -31,7 +31,8 @@ EMAIL_PORT=587
 EMAIL_USE_TLS=true
 EMAIL_HOST_USER=
 EMAIL_HOST_PASSWORD=
-DEFAULT_FROM_EMAIL=BaatCheet <no-reply@baatcheet.app>
+# Quoted: the server reads this file with bash too, where < and > would break it.
+DEFAULT_FROM_EMAIL="BaatCheet <no-reply@baatcheet.app>"
 
 # Optional: "Sign in with Google". Without both, the button is hidden.
 # Create an OAuth client at https://console.cloud.google.com/apis/credentials with redirect URI

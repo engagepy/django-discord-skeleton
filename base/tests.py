@@ -262,3 +262,18 @@ def test_production_refuses_to_start_without_a_secret_key():
     )
     assert result.returncode != 0
     assert "DJANGO_SECRET_KEY must be set" in result.stderr
+
+
+def test_sample_env_is_valid_shell():
+    # Regression: an unquoted "BaatCheet <no-reply@…>" broke `set -a; . /etc/baatcheet/env`, which the deploy tool
+    # uses before every management command, so later keys silently went missing.
+    result = subprocess.run(
+        ["bash", "-c", 'set -e; set -a; . ./.sample-env; printf %s "$DEFAULT_FROM_EMAIL"'],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stderr == ""
+    assert result.stdout == "BaatCheet <no-reply@baatcheet.app>"
