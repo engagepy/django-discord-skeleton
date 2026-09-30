@@ -1,5 +1,7 @@
 ![BaatCheet](https://user-images.githubusercontent.com/42845567/201497019-2dd93260-117d-4237-99ab-975e3fe21d4a.png)
 
+https://github.com/user-attachments/assets/98d44ab7-4f39-4dcf-8b5c-5f78a0876f47
+
 # BaatCheet
 
 Themed discussion rooms, live at [baatcheet.app](https://baatcheet.app). A Django backend, a Vite + React frontend,
